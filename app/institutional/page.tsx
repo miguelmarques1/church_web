@@ -122,7 +122,7 @@ export default function InstitutionalPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Pastor Principal</h3>
-                  <p className="text-gray-600">Rev. João Silva</p>
+                  <p className="text-gray-600">Pr. Jurandi Mello</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
@@ -131,7 +131,7 @@ export default function InstitutionalPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Pastora Auxiliar</h3>
-                  <p className="text-gray-600">Pra. Maria Silva</p>
+                  <p className="text-gray-600">Pra. Alessandra Mello</p>
                 </div>
               </div>
             </CardContent>
@@ -150,7 +150,7 @@ export default function InstitutionalPage() {
                 <MapPin className="h-5 w-5 text-orange-600 mt-0.5" />
                 <div>
                   <p className="font-semibold text-gray-900">Endereço</p>
-                  <p className="text-gray-600">Rua da Igreja, 123 - Centro<br />São Paulo/SP</p>
+                  <p className="text-gray-600">Av. Brasil, 403 - Vila Correa - Ferraz de Vasconcelos<br />São Paulo/SP</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
@@ -186,7 +186,7 @@ export default function InstitutionalPage() {
                   <Calendar className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-1">Domingo</h3>
-                <p className="text-gray-600">9h00 e 19h00</p>
+                <p className="text-gray-600">19h00</p>
               </div>
               <div className="text-center p-4 bg-gradient-to-br from-amber-50 to-yellow-50 rounded-lg border border-amber-100">
                 <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center mx-auto mb-2">
@@ -200,7 +200,7 @@ export default function InstitutionalPage() {
                   <Calendar className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-1">Sexta-feira</h3>
-                <p className="text-gray-600">20h00 (Jovens)</p>
+                <p className="text-gray-600">20h00</p>
               </div>
             </div>
           </CardContent>
