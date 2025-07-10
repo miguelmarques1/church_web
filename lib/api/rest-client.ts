@@ -13,7 +13,7 @@ class RestClient {
   private baseURL: string
   private token: string | null = null
 
-  constructor(baseURL = "http://localhost:3000/api") {
+  constructor(baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api") {
     this.baseURL = baseURL
     this.loadToken()
   }
