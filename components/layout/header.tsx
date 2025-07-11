@@ -30,6 +30,7 @@ const menuItems = [
   { name: "Chat", href: "/chat" },
   { name: "Pedidos de Oração", href: "/prayer-requests" },
   { name: "Configurações", href: "/settings" },
+  { name: "Membros", href: "/members" },
 ]
 
 export function Header({ title, showNotification = true }: HeaderProps) {

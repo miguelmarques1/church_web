@@ -3,14 +3,14 @@ import type { Member } from "@/types/index"
 
 interface CreateMemberRequest {
   name: string
-  birthdate?: string
+  birthdate?: string | null
   gender: "male" | "female"
   role_id: number
   phone: string
-  email?: string
-  image_url?: string
+  email?: string | null
+  image_url?: string | null
   family_id?: number
-  ministries?: number[]
+  ministries?: {ministry_id: number}[]
 }
 
 interface UpdateMemberRequest extends Partial<CreateMemberRequest> {

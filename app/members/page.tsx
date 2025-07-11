@@ -2,18 +2,20 @@
 
 import { useState, useEffect } from "react"
 import { Header } from "@/components/layout/header"
-import { Sidebar } from "@/components/layout/sidebar"
 import { BottomNav } from "@/components/layout/bottom-nav"
 import { PageHeader } from "@/components/common/page-header"
 import { LoadingState } from "@/components/common/loading-state"
 import { EmptyState } from "@/components/common/empty-state"
 import { MemberCard } from "@/components/common/member-card"
-import { Search } from "lucide-react"
+import { Search, Plus } from "lucide-react" // Import Plus icon
 import { memberRepository } from "@/lib/repositories/member-repository"
 import { useAuth } from "@/components/auth/auth-provider"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import type { Member } from "@/types"
+import { Button } from "@/components/ui/button" // Import Button
+import { ProtectedAction } from "@/components/auth/protected-action" // Import ProtectedAction
+import Link from "next/link" // Import Link
 
 export default function MembersPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -47,7 +49,7 @@ export default function MembersPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex">
         <div className="flex-1 flex flex-col">
-          <Header title="Nossa Família"/>
+          <Header title="Nossa Família" />
           <main className="p-4 flex items-center justify-center h-[80vh]">
             <LoadingState message="Carregando..." />
           </main>
@@ -79,16 +81,22 @@ export default function MembersPage() {
         <Header title="Nossa Família" />
 
         <main className="p-4 pb-20 md:pb-4">
-          <PageHeader
-            title="Nossa Família na Fé"
-            searchPlaceholder="Buscar irmão..."
-            searchValue={searchTerm}
-            onSearchChange={setSearchTerm}
-            createButton={{
-              label: "Novo Irmão",
-              href: "/members/create",
-            }}
-          />
+          <div className="flex items-center justify-between mb-4">
+            <PageHeader
+              title="Nossa Família na Fé"
+              searchPlaceholder="Buscar irmão..."
+              searchValue={searchTerm}
+              onSearchChange={setSearchTerm}
+              // createButton prop removed here
+            />
+            <ProtectedAction resource="members" action="create">
+              <Link href="/members/create" passHref>
+                <Button className="ml-4">
+                  <Plus className="mr-2 h-4 w-4" /> Novo Irmão
+                </Button>
+              </Link>
+            </ProtectedAction>
+          </div>
 
           {loading && <LoadingState message="Carregando nossa família..." />}
 
@@ -105,10 +113,12 @@ export default function MembersPage() {
               icon={Search}
               title="Nenhum irmão encontrado"
               description="Tente ajustar sua busca ou convide alguém para nossa família."
-              action={{
-                label: "Convidar Irmão",
-                href: "/members/create",
-              }}
+              action={
+                {
+                  label: "Adicionar Irmão",
+                  href: "/members/create",
+                }
+              }
             />
           )}
         </main>

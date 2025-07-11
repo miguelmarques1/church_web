@@ -15,35 +15,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft, Upload, Save, User, Phone, Building } from "lucide-react"
 import Image from "next/image"
+import { useRoles } from "@/hooks/use-roles"
+import { useFamilies } from "@/hooks/use-families"
+import { useMinistries } from "@/hooks/use-ministries"
+import { useMember } from "@/hooks/use-member"
+import { create } from "domain"
 
-const mockRoles = [
-  { id: 1, name: "Membro", credentials: "member" },
-  { id: 2, name: "Líder de Jovens", credentials: "leader" },
-  { id: 3, name: "Líder de Ministério", credentials: "leader" },
-  { id: 4, name: "Pastor", credentials: "pastor" },
-  { id: 5, name: "Administrador", credentials: "admin" },
-]
-
-const mockMinistries = [
-  { id: 1, name: "Ministério de Louvor" },
-  { id: 2, name: "Ministério de Ensino" },
-  { id: 3, name: "Ministério de Jovens" },
-  { id: 4, name: "Ministério Infantil" },
-  { id: 5, name: "Ministério Social" },
-]
-
-const mockFamilies = [
-  { id: 1, name: "Família Silva" },
-  { id: 2, name: "Família Santos" },
-  { id: 3, name: "Família Oliveira" },
-  { id: 4, name: "Família Costa" },
-]
 
 export default function CreateMemberPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { user, role, login } = useAuth()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
+  const { roles } = useRoles();
+  const { families } = useFamilies();
+  const { ministries } = useMinistries();
+  const { createMember } = useMember();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -105,10 +92,11 @@ export default function CreateMemberPage() {
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = "Telefone é obrigatório"
-    } else if (!/^$$\d{2}$$\s\d{4,5}-\d{4}$/.test(formData.phone)) {
-      newErrors.phone = "Formato inválido. Use: (11) 99999-9999"
+      newErrors.phone = "Telefone é obrigatório";
+    } else if (!/^\(\d{2}\)\s\d{4,5}-\d{4}$/.test(formData.phone)) {
+      newErrors.phone = "Formato inválido. Use: (11) 99999-9999";
     }
+
 
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Email inválido"
@@ -131,8 +119,17 @@ export default function CreateMemberPage() {
 
     setIsSubmitting(true)
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await createMember({
+        gender: formData.gender as "male" | "female",
+        name: formData.name,
+        birthdate: formData.birthdate || null,
+        phone: formData.phone,
+        email: formData.email || null,
+        role_id: parseInt(formData.roleId),
+        family_id: parseInt(formData.familyId),
+        image_url: formData.imageUrl ?? null,
+        ministries: (formData.ministries ?? []).map((id) => ({ ministry_id: id })),
+      });
       console.log("Creating member:", formData)
       router.push("/members")
     } catch (error) {
@@ -280,7 +277,7 @@ export default function CreateMemberPage() {
                         <SelectValue placeholder="Selecione o cargo" />
                       </SelectTrigger>
                       <SelectContent>
-                        {mockRoles.map((role) => (
+                        {roles.map((role) => (
                           <SelectItem key={role.id} value={role.id.toString()}>
                             {role.name}
                           </SelectItem>
@@ -297,7 +294,7 @@ export default function CreateMemberPage() {
                         <SelectValue placeholder="Selecione uma família (opcional)" />
                       </SelectTrigger>
                       <SelectContent>
-                        {mockFamilies.map((family) => (
+                        {families.map((family) => (
                           <SelectItem key={family.id} value={family.id.toString()}>
                             {family.name}
                           </SelectItem>
@@ -309,7 +306,7 @@ export default function CreateMemberPage() {
                   <div>
                     <Label>Ministérios</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                      {mockMinistries.map((ministry) => (
+                      {ministries.map((ministry) => (
                         <div key={ministry.id} className="flex items-center space-x-2">
                           <Checkbox
                             id={`ministry-${ministry.id}`}

@@ -2,15 +2,17 @@
 
 import { useState } from "react"
 import { Header } from "@/components/layout/header"
-import { Sidebar } from "@/components/layout/sidebar"
 import { BottomNav } from "@/components/layout/bottom-nav"
 import { PageHeader } from "@/components/common/page-header"
 import { LoadingState } from "@/components/common/loading-state"
 import { EmptyState } from "@/components/common/empty-state"
 import { StatsCard } from "@/components/common/stats-card"
 import { MinistryCard } from "@/components/common/ministry-card"
-import { Users } from "lucide-react"
+import { Users, PlusCircle } from "lucide-react" // Added PlusCircle and Loader2
 import { useMinistries } from "@/hooks/use-ministries"
+import { Button } from "@/components/ui/button" // Added Button import
+import Link from "next/link" // Added Link import
+import { ProtectedAction } from "@/components/auth/protected-action" // Added ProtectedAction import
 
 export default function MinistriesPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -30,16 +32,23 @@ export default function MinistriesPage() {
         <Header title="Ministérios" />
 
         <main className="p-4 pb-20 md:pb-4">
-          <PageHeader
-            title="Ministérios"
-            searchPlaceholder="Buscar ministério..."
-            searchValue={searchTerm}
-            onSearchChange={setSearchTerm}
-            createButton={{
-              label: "Adicionar",
-              href: "/ministries/create",
-            }}
-          />
+          <div className="flex items-center justify-between mb-6">
+            <PageHeader
+              title="Ministérios"
+              searchPlaceholder="Buscar ministério..."
+              searchValue={searchTerm}
+              onSearchChange={setSearchTerm}
+              // Removed createButton from PageHeader to use ProtectedAction separately
+            />
+            <ProtectedAction resource="ministries" action="create">
+              <Link href="/ministries/create" passHref>
+                <Button className="flex items-center gap-2">
+                  <PlusCircle className="h-4 w-4" />
+                  Adicionar
+                </Button>
+              </Link>
+            </ProtectedAction>
+          </div>
 
           {loading && <LoadingState message="Carregando ministérios..." />}
 
@@ -67,10 +76,12 @@ export default function MinistriesPage() {
               icon={Users}
               title="Nenhum ministério encontrado"
               description="Tente ajustar sua pesquisa ou adicione um novo ministério."
-              action={{
-                label: "Adicionar Ministério",
-                href: "/ministries/create",
-              }}
+              action={
+                {
+                  label: "Adicionar Ministério",
+                  href: "/ministries/create",
+                }
+              }
             />
           )}
         </main>
