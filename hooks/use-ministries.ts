@@ -4,11 +4,14 @@ import { useState, useEffect } from "react"
 import { ministryRepository } from "@/lib/repositories/ministry-repository"
 import { toast } from "sonner"
 import type { Ministry } from "@/types"
+import { useRouter } from "next/navigation"
 
 export function useMinistries() {
   const [ministries, setMinistries] = useState<Ministry[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  const router = useRouter()
 
   const loadMinistries = async () => {
     try {
@@ -25,6 +28,26 @@ export function useMinistries() {
     }
   }
 
+  const createMinistry = async (data: { name: string }) => {
+    try {
+      setLoading(true)
+      setError(null)
+      const newMinistry = await ministryRepository.create(data)
+      setMinistries((prev) => [...prev, newMinistry])
+      toast.success("Ministério criado com sucesso!")
+      router.push("/ministries")
+      return newMinistry
+    } catch (err) {
+      console.error("Error creating ministry:", err)
+      const errorMessage = err instanceof Error ? err.message : "Erro ao criar ministério"
+      setError(errorMessage)
+      toast.error(errorMessage)
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     loadMinistries()
   }, [])
@@ -34,5 +57,6 @@ export function useMinistries() {
     loading,
     error,
     loadMinistries,
+    createMinistry,
   }
 }

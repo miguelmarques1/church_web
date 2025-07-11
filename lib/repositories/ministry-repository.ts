@@ -33,6 +33,24 @@ class MinistryRepository {
       throw error
     }
   }
+
+  async create(data: { name: string }): Promise<Ministry> {
+    try {
+      const response = await restClient.post<{ data: Ministry; error: boolean; message: string | null }>(
+        "/ministries",
+        data,
+      )
+
+      if (response.data && !response.data.error) {
+        return response.data.data
+      }
+
+      throw new Error(response.data?.message || "Failed to create ministry")
+    } catch (error) {
+      console.error("Error creating ministry:", error)
+      throw error
+    }
+  }
 }
 
 export const ministryRepository = new MinistryRepository()

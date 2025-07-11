@@ -60,16 +60,21 @@ export default function DevotionalsPage() {
       <Header title="Devocionais" />
 
       <main className="p-4 pb-20">
-        <PageHeader
-          title="Devocionais"
-          searchPlaceholder="Buscar devocional..."
-          searchValue={searchTerm}
-          onSearchChange={setSearchTerm}
-          createButton={{
-            label: "Novo Devocional",
-            href: "/devotionals/create",
-          }}
-        />
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex-1">
+            <PageHeader
+              title="Devocionais"
+              searchPlaceholder="Buscar devocional..."
+              searchValue={searchTerm}
+              onSearchChange={setSearchTerm}
+            />
+          </div>
+          <ProtectedAction resource="devotionals" action="create">
+            <Button asChild className="ml-4">
+              <Link href="/devotionals/create">Novo Devocional</Link>
+            </Button>
+          </ProtectedAction>
+        </div>
 
         {/* Filter Tabs */}
         <div className="flex gap-2 mb-6 overflow-x-auto">
@@ -154,10 +159,12 @@ export default function DevotionalsPage() {
             icon={BookOpen}
             title="Nenhum devocional encontrado"
             description="Tente ajustar sua pesquisa ou crie um novo devocional."
-            action={{
-              label: "Criar Devocional",
-              href: "/devotionals/create",
-            }}
+            action={
+              {
+                label: "Criar Devocional",
+                href: "/devotionals/create",
+              } 
+            }
           />
         )}
       </main>

@@ -4,10 +4,10 @@ import type { News } from "@/types/index"
 interface CreateNewsRequest {
   title: string
   content: string
-  excerpt?: string
-  image_url?: string
-  category: string
-  published?: boolean
+  publication_date: Date
+  author_id: number
+  featured?: boolean
+  featured_image?: string
 }
 
 class NewsRepository {
@@ -18,7 +18,6 @@ class NewsRepository {
       if (response.data && !response.data.error) {
         return response.data.data.map((news) => ({
           ...news,
-          createdAt: new Date(news.created_at),
         }))
       }
 
@@ -36,7 +35,6 @@ class NewsRepository {
       if (response.data && !response.data.error) {
         return {
           ...response.data.data,
-          created_at: new Date(response.data.data.created_at),
         }
       }
 
@@ -49,12 +47,14 @@ class NewsRepository {
 
   async create(newsData: CreateNewsRequest): Promise<News> {
     try {
-      const response = await restClient.post<{ data: News; error: boolean; message: string | null }>("/news", newsData)
+      const response = await restClient.post<{ data: News; error: boolean; message: string | null }>("/news", {
+        ...newsData,
+        publication_date: newsData.publication_date.toISOString(),
+      })
 
       if (response.data && !response.data.error) {
         return {
           ...response.data.data,
-          created_at: new Date(response.data.data.created_at),
         }
       }
 
@@ -67,15 +67,19 @@ class NewsRepository {
 
   async update(id: number, newsData: Partial<CreateNewsRequest>): Promise<News> {
     try {
+      const updateData = {
+        ...newsData,
+        ...(newsData.publication_date && { publication_date: newsData.publication_date.toISOString() }),
+      }
+
       const response = await restClient.put<{ data: News; error: boolean; message: string | null }>(
         `/news/${id}`,
-        newsData,
+        updateData,
       )
 
       if (response.data && !response.data.error) {
         return {
           ...response.data.data,
-          created_at: new Date(response.data.data.created_at),
         }
       }
 
@@ -106,7 +110,6 @@ class NewsRepository {
       if (response.data && !response.data.error) {
         return response.data.data.map((news) => ({
           ...news,
-          created_at: new Date(news.created_at),
         }))
       }
 

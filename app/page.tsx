@@ -178,20 +178,19 @@ export default function HomePage() {
                     <Card key={news.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
                       <div className="relative h-48">
                         <img
-                          src={news.image_url}
+                          src={news.featured_image}
                           alt={news.title}
                           className="w-full h-full object-cover"
                         />
                       </div>
                       <CardContent className="p-6">
                         <h3 className="font-bold text-lg text-gray-900 mb-2">{news.title}</h3>
-                        <p className="text-gray-600 mb-4">{news.excerpt}</p>
                         <div className="flex items-center justify-between text-sm text-gray-500">
                           <div className="flex items-center gap-1">
                             <Calendar className="h-4 w-4" />
-                            {new Date(news.created_at).toLocaleDateString("pt-BR")}
+                            {new Date(news.publication_date).toLocaleDateString("pt-BR")}
                           </div>
-                          <span className="font-medium">{news.author}</span>
+                          <span className="font-medium">{news.author.name}</span>
                         </div>
                       </CardContent>
                     </Card>

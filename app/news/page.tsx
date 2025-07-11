@@ -29,15 +29,15 @@ export default function NewsPage() {
     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase())
 
     if (filter === "all") return matchesSearch
-    if (filter === "published") return matchesSearch && item.published
-    if (filter === "draft") return matchesSearch && !item.published
+    if (filter === "published") return matchesSearch && item.featured
+    if (filter === "draft") return matchesSearch && !item.featured
 
     return matchesSearch
   })
 
   // Count news by status
-  const publishedCount = news.filter((item: News) => item.published).length
-  const draftCount = news.filter((item: News) => !item.published).length
+  const publishedCount = news.filter((item: News) => item.featured).length
+  const draftCount = news.filter((item: News) => !item.featured).length
 
   // Check if user can see drafts (only leaders, pastors, admins)
   const canSeeDrafts = role === "leader" || role === "pastor" || role === "admin"
@@ -98,7 +98,7 @@ export default function NewsPage() {
         {!loading && (
           <div className="space-y-4">
             {filteredNews.map((newsItem: News) => (
-              <NewsCard key={newsItem.id} news={newsItem} onDelete={handleDelete} />
+              <NewsCard key={`${newsItem.id}-mobile`} news={newsItem} onDelete={handleDelete} />
             ))}
           </div>
         )}

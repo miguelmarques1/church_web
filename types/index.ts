@@ -72,14 +72,11 @@ export interface Event {
 export interface News {
   id: number
   title: string
-  excerpt?: string
-  content?: string
-  image_url?: string
-  created_at: Date
-  author?: string
-  category?: string
-  published?: boolean
-  views?: number
+  content: string
+  publication_date: Date
+  author: Member
+  featured: boolean
+  featured_image?: string
 }
 
 export interface Devotional {

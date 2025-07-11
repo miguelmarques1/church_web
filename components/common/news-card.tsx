@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, Eye, Edit, Trash2 } from "lucide-react"
+import { Calendar, Edit, Trash2, Star } from "lucide-react"
 import { ProtectedAction } from "@/components/auth/protected-action"
 import Image from "next/image"
 import Link from "next/link"
@@ -21,14 +21,17 @@ export function NewsCard({ news, onDelete }: NewsCardProps) {
         <div className="flex flex-col md:flex-row">
           <div className="relative w-full md:w-48 h-48 md:h-32">
             <Image
-              src={news.image_url || "/placeholder.svg?height=200&width=300"}
+              src={news.featured_image || "/placeholder.svg?height=200&width=300"}
               alt={news.title}
               fill
               className="object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
             />
-            {!news.published && (
+            {news.featured && (
               <div className="absolute top-2 left-2">
-                <Badge variant="secondary">Rascunho</Badge>
+                <Badge variant="default" className="bg-yellow-500 text-white">
+                  <Star className="h-3 w-3 mr-1" />
+                  Destaque
+                </Badge>
               </div>
             )}
           </div>
@@ -37,23 +40,24 @@ export function NewsCard({ news, onDelete }: NewsCardProps) {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <Badge variant="outline" className="text-xs">
-                    {news.category}
+                    {news.author.role.name}
                   </Badge>
-                  <span className="text-xs text-gray-500">por {news.author}</span>
+                  <span className="text-xs text-gray-500">por {news.author.name}</span>
                 </div>
                 <Link href={`/news/${news.id}`}>
-                  <h3 className="font-semibold text-gray-900 mb-2 hover:text-red-600">{news.title}</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2 hover:text-red-600 line-clamp-2">{news.title}</h3>
                 </Link>
-                <p className="text-sm text-gray-600 mb-3">{news.excerpt}</p>
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">{news.content.substring(0, 150)}...</p>
                 <div className="flex items-center gap-4 text-xs text-gray-500">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    {new Date(news.created_at).toLocaleDateString("pt-BR")}
+                    {new Date(news.publication_date).toLocaleDateString("pt-BR")}
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Eye className="h-3 w-3" />
-                    {news.views || 0} visualizações
-                  </div>
+                  {news.author.family && (
+                    <div className="flex items-center gap-1">
+                      <span>Família: {news.author.family.name}</span>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex gap-1 ml-4">
