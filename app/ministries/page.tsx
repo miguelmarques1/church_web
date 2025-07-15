@@ -8,11 +8,11 @@ import { LoadingState } from "@/components/common/loading-state"
 import { EmptyState } from "@/components/common/empty-state"
 import { StatsCard } from "@/components/common/stats-card"
 import { MinistryCard } from "@/components/common/ministry-card"
-import { Users, PlusCircle } from "lucide-react" // Added PlusCircle and Loader2
+import { Users, PlusCircle } from "lucide-react" 
 import { useMinistries } from "@/hooks/use-ministries"
-import { Button } from "@/components/ui/button" // Added Button import
-import Link from "next/link" // Added Link import
-import { ProtectedAction } from "@/components/auth/protected-action" // Added ProtectedAction import
+import { Button } from "@/components/ui/button"
+import Link from "next/link" 
+import { ProtectedAction } from "@/components/auth/protected-action"
 
 export default function MinistriesPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
